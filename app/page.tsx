@@ -101,19 +101,19 @@ const CASE_STUDIES = [
     title: 'MCP Security Scanner',
     tier: 'Complex — $500',
     desc: 'Built an open-source security scanner for AI agent frameworks (MCP servers). Detects 15+ vulnerability categories including shell injection, auth bypass, SSRF, and supply chain issues. Published on npm.',
-    result: 'Running in CI, used by 200+ developers on GitHub.',
+    result: 'Published on npm, runs in CI, open source on GitHub.',
   },
   {
-    title: 'Full-stack Bible Q&A web app',
+    title: 'Full-stack AI web app',
     tier: 'Complex — $500',
-    desc: 'Built biible.net — a free AI Bible Q&A tool from scratch. Next.js frontend, Supabase backend, deployed to production on Vercel.',
-    result: 'Live at biible.net, serving real users.',
+    desc: 'Built a production AI web app from scratch: Next.js frontend, Supabase backend, authentication, database, and deployment. Handles real user traffic.',
+    result: 'Deployed and live, connected to real APIs.',
   },
   {
-    title: 'Autonomous AI coding agent',
+    title: 'Autonomous agent system',
     tier: 'Complex — $500',
-    desc: 'Built an AI agent that improves itself — detects its own failures, writes skills to fix them, retries and measures. Runs 24/7 via cron.',
-    result: 'Has run 1,800+ self-improvement cycles with measurable gains.',
+    desc: 'Built an AI agent that runs 24/7, detects its own failures, writes skills to fix them, and iterates on itself. Includes a research loop that discovers new tools.',
+    result: 'Running autonomously, improving itself continuously.',
   },
 ]
 
