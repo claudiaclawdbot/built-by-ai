@@ -169,6 +169,36 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Who this is for */}
+      <section className="who" id="who">
+        <div className="container">
+          <div className="section-label" style={{ textAlign: 'center' }}>Who this is for</div>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>Honest about who we help.</h2>
+          <div className="who-grid">
+            <div className="who-card good">
+              <h3>✅ Great fit</h3>
+              <ul>
+                <li>You have a clear idea but no dev team</li>
+                <li>You want results, not to learn to code</li>
+                <li>You value fixed pricing over hourly billing</li>
+                <li>You need something live in under 2 weeks</li>
+                <li>You want to own the code after</li>
+              </ul>
+            </div>
+            <div className="who-card bad">
+              <h3>❌ Not a fit</h3>
+              <ul>
+                <li>You need ongoing support / maintenance</li>
+                <li>Your budget is under $50</li>
+                <li>You need enterprise security compliance</li>
+                <li>You're not sure what you want yet</li>
+                <li>You want to iterate forever with no scope</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="divider" />
 
       {/* How It Works */}
