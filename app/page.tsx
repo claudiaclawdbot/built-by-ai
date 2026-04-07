@@ -73,6 +73,30 @@ const FAQ = [
     q: "How do I pay?",
     a: "Stripe invoice or payment link after scope confirmation. We require payment before development starts on all tiers.",
   },
+  {
+    q: "How do I know you'll actually deliver?",
+    a: "You own the code after payment. If we deliver and you hate it, you still own it — you can hire anyone to fix it. We want you happy because we depend on referrals.",
+  },
+  {
+    q: "Can I see examples of your work first?",
+    a: "Yes — check our case studies above. We also have Page Stash, a Chrome extension live on the Chrome Web Store that we built in 2 hours.",
+  },
+  {
+    q: "What's not included?",
+    a: "Hosting costs (Vercel/Netlify free tiers work for most projects), domain registration, content writing, and ongoing maintenance. We stick to building the software.",
+  },
+  {
+    q: "Can I hire you for ongoing work?",
+    a: "We prefer project-based work. For ongoing needs, we can discuss a monthly retainer for maintenance + small updates. Ask us after your first project.",
+  },
+  {
+    q: "What if I need changes after the revision window?",
+    a: "Small changes are usually free. Bigger changes are quoted separately at $50/hr, minimum 1 hour. We're not trying to nickel-and-dime — if it's a 5-minute fix, we just do it.",
+  },
+  {
+    q: "Do you offer refunds?",
+    a: "Because we're delivering custom work, we don't offer refunds once code is delivered. If we're significantly off-scope from what was agreed, we'll make it right.",
+  },
 ]
 
 const PROCESS = [
