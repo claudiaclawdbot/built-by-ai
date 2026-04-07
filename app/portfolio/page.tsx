@@ -94,7 +94,12 @@ export default function Portfolio() {
                   </div>
                   <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{project.name}</h2>
                 </div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>⏱ {project.timeline}</span>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  {project.price && (
+                    <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.9rem' }}>{project.price}</span>
+                  )}
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>⏱ {project.timeline}</span>
+                </div>
               </div>
 
               <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '20px' }}>
@@ -109,7 +114,7 @@ export default function Portfolio() {
                 fontSize: '0.9rem',
                 marginBottom: '20px'
               }}>
-                💡 {project.highlight}
+                💡 {project.outcome}
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
