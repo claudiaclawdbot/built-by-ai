@@ -462,6 +462,7 @@ export default function HomePage() {
           <div className="footer-links">
             <a href="#how-it-works">How It Works</a>
             <a href="#pricing">Pricing</a>
+            <a href="/blog/vibe-coding-guide">Blog</a>
             <a href="#intake">Get Started</a>
           </div>
         </div>
