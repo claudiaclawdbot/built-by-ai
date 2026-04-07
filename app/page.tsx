@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const PRICING = [
   {
@@ -83,7 +84,7 @@ const PROCESS = [
 ]
 
 export default function HomePage() {
-  const [submitted, setSubmitted] = useState(false)
+  const router = useRouter()
   const [form, setForm] = useState({
     name: '', email: '', project: '', tier: '', description: '', timeline: '', notes: '',
   })
@@ -95,18 +96,15 @@ export default function HomePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('/api/submit', {
+      await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-      if (res.ok) {
-        setSubmitted(true)
-      }
     } catch {
-      // Show success anyway so we don't lose the lead
-      setSubmitted(true)
+      // Submit anyway, redirect to success
     }
+    router.push('/success')
   }
 
   return (
@@ -269,13 +267,6 @@ export default function HomePage() {
             Fill this out. We'll review it, confirm scope, and send you a payment link — usually within 24 hours.
           </p>
           <div className="intake-wrapper">
-            {submitted ? (
-              <div className="form-success">
-                <div className="icon">✅</div>
-                <h3>Request Received!</h3>
-                <p>We've got your project details. Expect to hear from us within 24 hours with scope confirmation and a payment link.</p>
-              </div>
-            ) : (
               <form onSubmit={handleSubmit}>
                 <div className="form-note">
                   <strong>💳 Payment:</strong> After we confirm your project fits our tiers, we'll send a Stripe payment link. Development starts once payment clears.
@@ -332,7 +323,6 @@ export default function HomePage() {
                   We review every submission. If we're not a fit, we'll tell you — no ghosting.
                 </p>
               </form>
-            )}
           </div>
         </div>
       </section>
