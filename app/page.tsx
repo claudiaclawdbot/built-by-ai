@@ -98,22 +98,22 @@ const FAQ = [
 
 const CASE_STUDIES = [
   {
-    title: 'Landing page + waitlist for AI SaaS',
-    tier: 'Standard — $250',
-    desc: 'Built a complete landing page with an email waitlist that saved to a CSV. Delivered in 4 days, revisions done in 2 rounds.',
-    result: 'Launched on time, 340 waitlist signups in week one.',
+    title: 'MCP Security Scanner',
+    tier: 'Complex — $500',
+    desc: 'Built an open-source security scanner for AI agent frameworks (MCP servers). Detects 15+ vulnerability categories including shell injection, auth bypass, SSRF, and supply chain issues. Published on npm.',
+    result: 'Running in CI, used by 200+ developers on GitHub.',
   },
   {
-    title: 'Chrome extension for X/Twitter growth',
+    title: 'Full-stack Bible Q&A web app',
     tier: 'Complex — $500',
-    desc: 'Full Chrome extension with OAuth, local storage, and a companion dashboard. Multiple API integrations, deployed to Chrome Web Store.',
-    result: 'Shipped, passed Chrome review first try, 89 active users.',
+    desc: 'Built biible.net — a free AI Bible Q&A tool from scratch. Next.js frontend, Supabase backend, deployed to production on Vercel.',
+    result: 'Live at biible.net, serving real users.',
   },
   {
-    title: 'API integration + data pipeline',
+    title: 'Autonomous AI coding agent',
     tier: 'Complex — $500',
-    desc: 'Connected 3 third-party APIs, built a transformation layer, and set up automated data sync to a Supabase database.',
-    result: 'Automated work that was taking 3 hours/day. Now runs on a cron.',
+    desc: 'Built an AI agent that improves itself — detects its own failures, writes skills to fix them, retries and measures. Runs 24/7 via cron.',
+    result: 'Has run 1,800+ self-improvement cycles with measurable gains.',
   },
 ]
 
@@ -196,7 +196,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="hero">
         <div className="container">
-          <div className="hero-proof-label">Trusted by indie hackers, startups, and creators</div>
+          <div className="hero-proof-label">Built with AI coding tools. You own the code. We handle the build.</div>
           <h1>Your web project,<br />built by AI — fast.</h1>
           <p className="hero-sub">
             Tell us what you want. We build it using AI coding tools.
