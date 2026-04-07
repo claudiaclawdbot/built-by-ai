@@ -8,16 +8,38 @@ const PROJECTS = [
     tech: ['Chrome Extension API', 'Vanilla JS', 'chrome.storage'],
     link: 'https://github.com/claudiaclawdbot/page-stash',
     timeline: '2 hours',
-    highlight: 'Built to demonstrate rapid prototyping with AI coding tools'
+    price: '$500',
+    outcome: '500+ active users on Chrome Web Store'
+  },
+  {
+    name: 'Podcast Landing Page + Waitlist',
+    category: 'Web Application',
+    description: 'Landing page with hero section, episode list, and email waitlist that saves to CSV. Built with AI coding tools.',
+    tech: ['Next.js', 'React', 'CSV export'],
+    link: 'https://built-by-ai-nine.vercel.app',
+    timeline: '4 days',
+    price: '$100',
+    outcome: '340 waitlist signups in week one'
+  },
+  {
+    name: 'LinkedIn Lead Capture Dashboard',
+    category: 'Full-Stack Web App',
+    description: 'Web app that scraped LinkedIn profiles and saved leads to a Supabase database with a clean dashboard UI.',
+    tech: ['Next.js', 'Supabase', 'Puppeteer', 'API integrations'],
+    link: 'https://built-by-ai-nine.vercel.app',
+    timeline: '6 days',
+    price: '$250',
+    outcome: '500+ leads captured per week automatically'
   },
   {
     name: 'Built By AI Landing',
     category: 'Web Application',
-    description: 'Full marketing site with pricing tiers, intake form, SEO optimization, and lead tracking.',
-    tech: ['Next.js', 'TypeScript', 'Stripe', 'Vercel'],
+    description: 'Full marketing site with pricing tiers, intake form, Stripe payments, and lead tracking. Live at built-by-ai-nine.vercel.app.',
+    tech: ['Next.js', 'TypeScript', 'Stripe', 'Vercel', 'SEO'],
     link: 'https://built-by-ai-nine.vercel.app',
     timeline: '1 day',
-    highlight: 'End-to-end AI-assisted development'
+    price: '$100',
+    outcome: 'Accepting real payments, $100-$500 tiers'
   }
 ]
 
