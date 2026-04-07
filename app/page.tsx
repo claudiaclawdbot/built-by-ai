@@ -124,6 +124,28 @@ export default function HomePage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
+  // Compute the payment message based on selected tier
+  const paymentMessage = (() => {
+    if (!form.tier || form.tier === 'custom' || form.tier === '') {
+      return 'After scope confirmation, we\'ll send a payment link.'
+    }
+    const p = PRICING.find(x => x.tier === form.tier)
+    return `You'll be redirected to Stripe to pay $${p?.price || 0} instantly — takes 30 seconds.`
+  })()
+
+  // Compute button label based on selected tier
+  const buttonLabel = (() => {
+    if (submitting) return 'Redirecting to Stripe...'
+    if (!form.tier || form.tier === 'custom' || form.tier === '') return 'Submit Request →'
+    const p = PRICING.find(x => x.tier === form.tier)
+    return `Pay $${p?.price || 0} & Submit →`
+  })()
+
+  // Helper text below button
+  const helperText = (!form.tier || form.tier === 'custom' || form.tier === '')
+    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting.'
+    : '💳 Secure payment via Stripe. You\'ll be redirected to complete payment.'
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
@@ -290,10 +312,7 @@ export default function HomePage() {
             <div className="intake-form">
               <form onSubmit={handleSubmit}>
                 <div className="form-note">
-                  <strong>💳 Payment:</strong>{' '}
-                  {form.tier && form.tier !== 'custom' && form.tier !== ''
-                    ? `You'll be redirected to Stripe to pay $${PRICING.find(p => p.tier === form.tier)?.price || ''} — takes 30 seconds.`
-                    : 'After scope confirmation, we'll send a payment link.'}
+                  <strong>💳 Payment:</strong>{' '}{paymentMessage}
                 </div>
 
                 <div className="form-row">
@@ -352,16 +371,10 @@ export default function HomePage() {
                   style={{ width: '100%', fontSize: '1.05rem', padding: '16px' }}
                   disabled={submitting}
                 >
-                  {submitting
-                    ? 'Redirecting to Stripe...'
-                    : form.tier && form.tier !== 'custom'
-                      ? `Pay $${PRICING.find(p => p.tier === form.tier)?.price || ''} & Submit →`
-                      : 'Submit Request →'}
+                  {buttonLabel}
                 </button>
                 <p style={{ textAlign: 'center', marginTop: '16px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                  {form.tier && form.tier !== 'custom'
-                    ? '💳 Secure payment via Stripe. You\'ll be redirected to complete payment.'
-                    : 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting.'}
+                  {helperText}
                 </p>
               </form>
             </div>
