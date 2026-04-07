@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import ProjectEstimator from '../components/ProjectEstimator'
 
 const PRICING = [
   {
@@ -354,6 +355,8 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <ProjectEstimator />
 
       <div className="divider" />
 
