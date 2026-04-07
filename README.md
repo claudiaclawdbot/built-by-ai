@@ -1,71 +1,77 @@
 # Built By AI
 
-> Boutique AI-assisted development service. Tell us what you want built. We ship working software.
+**We build your web app, automation, or script using AI coding tools. You get the code. Fixed price: $100-$500.**
 
-**Website:** [builtbyai.dev](https://builtbyai.dev) *(deploy to Vercel to activate)*
+🌐 **Live:** https://built-by-ai-nine.vercel.app
 
 ---
 
 ## What This Is
 
-Built By AI is a real service business. This repo contains the marketing site + operational scripts. The actual client projects live in separate private repos created per-project.
+A boutique AI-assisted development studio. We use Cursor, Claude Code, and Codex to build working software for people who have ideas but don't want to become developers.
 
-### Pricing Tiers
+- **Fixed price tiers** — no hourly billing, no surprises
+- **You own the code** — GitHub repo delivered after payment
+- **Fast turnaround** — 3-14 days depending on tier
+- **Honest about fit** — we say no if we're not the right fit
 
-| Tier | Price | Scope | Delivery |
-|------|-------|-------|----------|
-| Basic | $100 | Single page / simple feature (~200 LOC) | 3–5 days |
-| Standard | $250 | Up to 3 pages or complex feature (~600 LOC) | 5–7 days |
-| Complex | $500 | Up to 6 pages, full-stack module (~1500 LOC) | 10–14 days |
-| Custom | Variable | Larger projects, scoped individually | TBD |
+---
+
+## Pricing
+
+| Tier | Price | Scope |
+|------|-------|-------|
+| Basic | $100 | Single page, ~200 lines, 7-day revisions |
+| Standard | $250 | Up to 3 pages, ~600 lines, 14-day revisions |
+| Complex | $500 | Up to 6 pages, full-stack + DB, 30-day revisions |
 
 ---
 
 ## Quick Start
 
-### 1. Deploy the Site
-
 ```bash
-cd projects/built-by-ai
+# Install
 npm install
-npm run dev       # Local dev
-npm run build    # Production build
+
+# Run locally
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-Deploy to Vercel (recommended):
-```bash
-npm install -g vercel
-vercel
-```
+---
 
-### 2. Set Up Stripe
+## Pre-Launch Setup (Required for Operations)
 
-See `docs/STRIPE-SETUP.md` for:
-- Creating payment links per tier
-- Setting up invoicing for custom scopes
-- Webhook configuration
-
-### 3. Set Up the Intake Form
-
-See `docs/INTAKE-FORM-SETUP.md` for:
-- Formspree (simplest — no backend)
-- Google Form embed
-- Supabase + email notification
-
-**Recommended v1 stack:** Formspree + Stripe payment links (no backend needed).
-
-### 4. Set Up GitHub Repo Creation
+### 1. Stripe Payment Links
 
 ```bash
-chmod +x scripts/create-client-repo.sh
-./scripts/create-client-repo.sh "client-name" "project-name"
+# Get your keys from https://dashboard.stripe.com/apikeys
+STRIPE_SECRET_KEY=sk_test_xxx node scripts/setup-stripe.js
 ```
 
-This creates a private repo with standard project structure (README, SPEC.md, CLIENT-NOTES.md, .gitignore).
+This creates three payment links for Basic/Standard/Complex tiers.
 
-**Prerequisites:**
-- `gh` CLI authenticated: `gh auth login`
-- Access to the GitHub account (ultimatecodemaster)
+### 2. GitHub Issue Lead Tracking (Optional)
+
+Add to Vercel environment variables:
+```
+GITHUB_TOKEN=ghp_your_token_here
+```
+
+This automatically creates a GitHub issue for each lead.
+
+### 3. Supabase Lead Database (Optional)
+
+1. Create project at https://supabase.com
+2. Add to Vercel env vars:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+See `docs/SUPABASE-SETUP.md` for table schema.
 
 ---
 
@@ -74,78 +80,68 @@ This creates a private repo with standard project structure (README, SPEC.md, CL
 ```
 built-by-ai/
 ├── app/
-│   ├── layout.tsx          # Root layout + metadata
-│   ├── page.tsx           # Landing page (all sections)
-│   └── globals.css        # Full stylesheet (dark theme)
-├── components/            # (extracted components if needed)
+│   ├── page.tsx           # Landing page
+│   ├── success/page.tsx   # Post-submission confirmation
+│   └── api/submit/route.js # Form submission handler
 ├── docs/
-│   ├── SERVICE.md         # One-pager service description
-│   ├── STRIPE-SETUP.md   # Stripe payment setup guide
-│   └── INTAKE-FORM-SETUP.md
+│   ├── SERVICE.md         # Service description
+│   ├── STRIPE-SETUP.md    # Stripe integration guide
+│   ├── SUPABASE-SETUP.md  # Supabase integration guide
+│   ├── SCOPE-TEMPLATES.md # Pre-written scope responses
+│   ├── EMAIL-TEMPLATES.md # Customer email templates
+│   ├── OUTREACH.md        # Marketing copy & targets
+│   └── PRODUCTHUNT-LAUNCH.md
 ├── scripts/
-│   └── create-client-repo.sh  # Client repo bootstrap script
-├── next.config.js
-├── package.json
-└── README.md
+│   ├── setup-stripe.js    # Create Stripe payment links
+│   └── create-lead.js     # Create GitHub issue for lead
+└── package.json
 ```
 
 ---
 
-## Before You Launch
+## Deploy
 
-### MUST DO
-1. [ ] Deploy site to Vercel
-2. [ ] Create Stripe account + payment links for all 3 tiers
-3. [ ] Add Stripe links to intake form flow (manual or via Formspree redirect)
-4. [ ] Set up Formspree or Supabase for intake form submissions
-5. [ ] Set up email delivery (Gmail API or Resend) so you get notified of new leads
-6. [ ] Create GitHub repo template (run `create-client-repo.sh` once to establish pattern)
-7. [ ] Add a domain (optional — Vercel free tier gives you `*.vercel.app`)
+```bash
+# First deploy
+npx vercel
 
-### NICE TO HAVE
-- [ ] Custom domain (Namecheap, Cloudflare — ~$10–15/year)
-- [ ] Logo/branding refinement
-- [ ] Analytics (Vercel Analytics or Plausible)
-- [ ] Email newsletter for leads who don't convert
-
----
-
-## Intake → Delivery Workflow
-
-```
-1. Lead submits form  →  Email/Spree notification
-2. Review scope      →  Confirm tier or custom quote
-3. Send Stripe link  →  Payment via Stripe
-4. Create repo       →  ./scripts/create-client-repo.sh
-5. Build project     →  Next.js + AI tools
-6. Deploy & deliver →  Vercel + GitHub transfer
-7. Revisions         →  Per tier timeline
-8. Done              →  Referral ask / testimonial
+# Production deploy
+npx vercel --prod
 ```
 
 ---
 
-## What You're Paying For (If Someone Asks)
+## What's Working
 
-- **Not just code** — scope review, revision rounds, deployment, repo setup
-- **Not a agency** — we're smaller, faster, and use AI tools to be efficient
-- **Not a subscription** — one-time payment, code is yours forever
-- **Not template flipping** — every project is purpose-built
-
----
-
-## Tech Stack Used to Build This Site
-
-- Next.js 14 (App Router)
-- TypeScript
-- CSS Variables (no Tailwind — keeps it simple)
-- Deployed on Vercel
+- ✅ Landing page with 5 sections (hero, testimonials, who-for, case studies, how it works, pricing, intake, FAQ)
+- ✅ Dedicated success page after form submission
+- ✅ Form submissions logged to console + GitHub issues (if token set)
+- ✅ SEO structured data (JSON-LD)
+- ✅ Twitter card meta tags
+- ✅ Mobile responsive
 
 ---
 
-## Notes for the Human
+## What's Missing
 
-- Twitter handle for marketing: **@CryptoTrap** (do not post without approval)
-- biible.net is your existing project — keep separate
-- For client projects: create separate private repos, don't mix into this one
-- Stripe account needs to be personal/business — not the agent's
+- Stripe payment links (need account)
+- Supabase lead database (optional but recommended)
+- Email notifications on new leads
+- Real testimonials (placeholder for now)
+
+---
+
+## Marketing
+
+See `docs/OUTREACH.md` for:
+- Twitter/X draft posts
+- DM templates for prospects
+- Community targets (IndieHackers, Reddit, Hacker News)
+
+See `docs/PRODUCTHUNT-LAUNCH.md` for PH launch strategy.
+
+---
+
+## Status
+
+**As of April 6, 2026:** Landing page live, operational infrastructure ready. Need Stripe account to start taking payments.

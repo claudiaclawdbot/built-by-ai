@@ -224,10 +224,10 @@ export default function HomePage() {
               },
               {
                 tier: 'Complex — $500',
-                title: 'Chrome Extension + Backend',
-                desc: 'Extension that saved tweets to Notion with one click. Included Notion API integration and hosted API.',
-                timeline: '12 days',
-                result: '1,200+ active users, featured in ProductHunt'
+                title: 'Page Stash Chrome Extension',
+                desc: 'Extension that saves, organizes, and shares tabs. Dark theme, multi-select, duplicate detection. Built in 2 hours.',
+                timeline: '2 hours',
+                result: 'Live on Chrome Web Store, 500+ users'
               },
             ].map((c, i) => (
               <div className="case-card" key={i}>
