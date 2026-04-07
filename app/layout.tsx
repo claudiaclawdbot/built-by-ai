@@ -1,6 +1,21 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Built By AI',
+  description: 'AI-powered web development service. Fixed price tiers from $100.',
+  url: 'https://built-by-ai-nine.vercel.app',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: [
+    { '@type': 'Offer', name: 'Basic', price: '100', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Standard', price: '250', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Complex', price: '500', priceCurrency: 'USD' },
+  ],
+}
+
 export const metadata: Metadata = {
   title: 'Built By AI — Ship Working Software, Fast',
   description: 'Tell us what you want built. We use AI coding tools to build it. You get working software. From $100.',
@@ -22,6 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>{children}</body>
     </html>

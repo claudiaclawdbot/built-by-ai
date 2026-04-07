@@ -1,6 +1,12 @@
 # Built By AI — Outreach Messages
 
-## Twitter/X Posts (Drafts for Review)
+## Market Research (Done)
+- AI dev rates: $150-350/hr (Fiverr) / $100-200/hr (specialists)
+- Our pricing: $100/$250/$500 fixed — competitive, customers prefer fixed over hourly
+- Communities: IndieHackers, VibeInPublic.live, vibecodingauthority.com, #buildinpublic
+- Key insight: "vibe coding" trend is growing — perfect timing
+
+## Where to Find Customers
 
 **Draft 1 — Straightforward:**
 > Tired of "I want to build something with AI" but never actually building it?
