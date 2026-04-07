@@ -9,6 +9,12 @@ export const metadata: Metadata = {
     description: 'Tell us what you want built. We use AI coding tools to build it. You get working software.',
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Built By AI — Ship Working Software, Fast',
+    description: 'We build your web app, automation, or script using AI coding tools. $100-$500 fixed price.',
+  },
+  keywords: ['AI coding', 'web development', 'build app', 'automation', 'vibe coding', 'ship faster'],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

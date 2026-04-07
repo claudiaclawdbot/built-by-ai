@@ -275,6 +275,13 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 .form-success h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
 .form-success p { color: var(--text-muted); }
 
+/* Testimonials */
+.testimonials { padding: 80px 0; background: var(--bg2); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
+.testimonial-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+.testimonial-quote { font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 16px; font-style: italic; }
+.testimonial-author { font-size: 0.85rem; color: var(--accent-light); font-weight: 600; }
+
 /* Responsive */
 @media (max-width: 640px) {
   .form-row { grid-template-columns: 1fr; }

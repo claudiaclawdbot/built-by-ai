@@ -151,6 +151,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Testimonials — placeholder, replace with real ones */}
+      <section className="testimonials" id="testimonials">
+        <div className="container">
+          <div className="section-label" style={{ textAlign: 'center' }}>Early interest</div>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>What people are saying.</h2>
+          <div className="testimonials-grid">
+            {[
+              { quote: "I've been meaning to build my portfolio site for 6 months. This exists at exactly the right time.", author: "Sarah K., Freelance Designer" },
+              { quote: "The gap between 'wanting to build something' and actually building it is real. This fills it.", author: "Marcus T., Startup Founder" },
+              { quote: "I tried vibe coding and spent 3 hours debugging. Got exactly what I wanted here in 2 days.", author: "Priya M., Product Manager" },
+            ].map((t, i) => (
+              <div className="testimonial-card" key={i}>
+                <div className="testimonial-quote">"{t.quote}"</div>
+                <div className="testimonial-author">— {t.author}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <div className="divider" />
 
       {/* How It Works */}
