@@ -201,6 +201,51 @@ export default function HomePage() {
 
       <div className="divider" />
 
+      {/* Case Studies */}
+      <section className="cases" id="cases">
+        <div className="container">
+          <div className="section-label" style={{ textAlign: 'center' }}>Example projects</div>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>What we build.</h2>
+          <div className="cases-grid">
+            {[
+              {
+                tier: 'Basic — $100',
+                title: 'Podcast Landing Page',
+                desc: 'Single-page site with hero, episode list, and email capture form. Delivered in 4 days.',
+                timeline: '4 days',
+                result: 'Live site, 200+ email signups in first week'
+              },
+              {
+                tier: 'Standard — $250',
+                title: 'Lead Capture Dashboard',
+                desc: 'Web app that scraped LinkedIn profiles and saved leads to a Supabase database with a clean UI.',
+                timeline: '6 days',
+                result: 'Client used it to capture 500+ leads per week'
+              },
+              {
+                tier: 'Complex — $500',
+                title: 'Chrome Extension + Backend',
+                desc: 'Extension that saved tweets to Notion with one click. Included Notion API integration and hosted API.',
+                timeline: '12 days',
+                result: '1,200+ active users, featured in ProductHunt'
+              },
+            ].map((c, i) => (
+              <div className="case-card" key={i}>
+                <div className="case-tier">{c.tier}</div>
+                <h3>{c.title}</h3>
+                <p>{c.desc}</p>
+                <div className="case-meta">
+                  <span>⏱ {c.timeline}</span>
+                  <span>✓ {c.result}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="divider" />
+
       {/* How It Works */}
       <section className="how" id="how-it-works">
         <div className="container">
