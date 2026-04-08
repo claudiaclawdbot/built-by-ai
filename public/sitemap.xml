@@ -2,39 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://built-by-ai-nine.vercel.app/</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/portfolio</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://built-by-ai-nine.vercel.app/services/second-brain</loc>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/blog/vibe-coding-guide</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/blog/hire-developer-vs-ai</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/blog/5-things-vibe-coding-perfect-for</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/blog/hire-ai-web-developer</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://built-by-ai-nine.vercel.app/blog/second-brain-setup-service</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://built-by-ai-nine.vercel.app/success</loc>
