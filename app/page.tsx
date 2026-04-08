@@ -59,6 +59,21 @@ const PRICING = [
     popular: false,
     tier: 'complex',
   },
+  {
+    name: 'Second Brain',
+    price: 750,
+    desc: 'Personal knowledge system — your own searchable brain.',
+    features: [
+      'Full folder system (raw/ wiki/ outputs/)',
+      'AI ingestion + organization scripts',
+      'Semantic search across everything',
+      'CLAUDE.md schema + onboarding',
+      '1-hour training session included',
+      'Delivered in 5 days',
+    ],
+    popular: false,
+    tier: 'second-brain',
+  },
 ]
 
 const FAQ = [
@@ -126,7 +141,7 @@ export default function HomePage() {
 
   // Compute the payment message based on selected tier
   const paymentMessage = (() => {
-    if (!form.tier || form.tier === 'custom' || form.tier === '') {
+    if (!form.tier || form.tier === 'custom' || form.tier === '' || form.tier === 'second-brain') {
       return 'After scope confirmation, we\'ll send a payment link.'
     }
     const p = PRICING.find(x => x.tier === form.tier)
@@ -136,14 +151,14 @@ export default function HomePage() {
   // Compute button label based on selected tier
   const buttonLabel = (() => {
     if (submitting) return 'Redirecting to Stripe...'
-    if (!form.tier || form.tier === 'custom' || form.tier === '') return 'Submit Request →'
+    if (!form.tier || form.tier === 'custom' || form.tier === '' || form.tier === 'second-brain') return 'Submit Request →'
     const p = PRICING.find(x => x.tier === form.tier)
     return `Pay $${p?.price || 0} & Submit →`
   })()
 
   // Helper text below button
   const helperText = (!form.tier || form.tier === 'custom' || form.tier === '')
-    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting.'
+    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting. Second Brain includes a 1hr training call.'
     : '💳 Secure payment via Stripe. You\'ll be redirected to complete payment.'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -425,6 +440,7 @@ export default function HomePage() {
                       <option value="basic">Basic — $100</option>
                       <option value="standard">Standard — $250</option>
                       <option value="complex">Complex — $500</option>
+                      <option value="second-brain">Second Brain — $750</option>
                       <option value="custom">Custom / Not sure</option>
                     </select>
                   </div>
