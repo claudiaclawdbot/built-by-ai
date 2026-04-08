@@ -483,6 +483,13 @@ export default function HomePage() {
                 <p style={{ textAlign: 'center', marginTop: '16px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                   {helperText}
                 </p>
+                <p style={{ textAlign: 'center', marginTop: '8px', color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                  Or email us directly:{' '}
+                  <a href="mailto:hello@built-by-ai.com?subject=Project%20Inquiry&body=Name%3A%0AEmail%3A%0AProject%20description%3A%0ATier%20(100%2F250%2F500)%3A%0A" style={{ color: 'var(--accent)' }}>
+                    hello@built-by-ai.com
+                  </a>
+                  {' '}— we respond within 24 hours.
+                </p>
               </form>
             </div>
           </div>
