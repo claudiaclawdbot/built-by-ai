@@ -9,6 +9,10 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-ano
 // GitHub token for creating issues (optional)
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN
 
+// Formspree form ID — get free at https://formspree.io
+// Set in Vercel: vercel env add FORMSPREE_FORM_ID
+const FORMSPREE_FORM_ID = process.env.FORMSPREE_FORM_ID
+
 export async function POST(request) {
   try {
     const body = await request.json()
@@ -29,6 +33,20 @@ export async function POST(request) {
       timeline, notes,
       time: new Date().toISOString()
     }, null, 2))
+
+    // Try to forward to Formspree for email notification (if configured)
+    if (FORMSPREE_FORM_ID) {
+      try {
+        await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, tier, timeline, project, description, notes }),
+        })
+        console.log('✅ Formspree notification sent')
+      } catch (e) {
+        console.error('Formspree error:', e.message)
+      }
+    }
 
     // Try to save to Supabase if configured
     const useSupabase = SUPABASE_URL !== 'https://your-project.supabase.co'
