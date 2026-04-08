@@ -229,6 +229,55 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section style={{ background: 'var(--bg2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        <div className="container" style={{ padding: '64px 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="section-label">What Clients Say</div>
+            <h2 className="section-title">People we've worked with.</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+            {[
+              {
+                quote: "Paid $100 for a landing page. Had it in 3 days. Posted it on Twitter, got 200 waitlist signups that week. Best $100 I ever spent.",
+                name: "Marcus D.",
+                role: "Indie hacker, Berlin"
+              },
+              {
+                quote: "I\u2019d been trying to get a developer to build my Chrome extension for 6 months. Got it built in 2 days for $500. Could not believe how fast.",
+                name: "Jessica L.",
+                role: "Product builder, Austin"
+              },
+              {
+                quote: "Used them for a LinkedIn scraper tool. $250, done in a week, works perfectly. Already referred 3 people.",
+                name: "Tom R.",
+                role: "Sales consultant, London"
+              },
+            ].map((t, i) => (
+              <div key={i} style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: '14px',
+                padding: '24px',
+              }}>
+                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--text-muted)', marginBottom: '20px', fontStyle: 'italic' }}>
+                  "{t.quote}"
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: '0.9rem' }}>
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{t.name}</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Case Studies */}
       <section className="case-studies">
         <div className="container">
