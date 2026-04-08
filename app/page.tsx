@@ -272,6 +272,48 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Why Us vs Freelancer */}
+      <section style={{ background: 'var(--bg2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        <div className="container" style={{ padding: '64px 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="section-label">The Difference</div>
+            <h2 className="section-title">Why work with us instead of a freelancer?</h2>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--border)' }}>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}></th>
+                  <th style={{ textAlign: 'center', padding: '12px 16px', color: 'var(--accent)', fontSize: '0.85rem', fontWeight: 700 }}>Built By AI</th>
+                  <th style={{ textAlign: 'center', padding: '12px 16px', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700 }}>Typical Freelancer</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { label: 'Price for a landing page', us: '$100', them: '$500–2,000' },
+                  { label: 'Price for a web app', us: '$250', them: '$2,000–8,000' },
+                  { label: 'Turnaround time', us: '3–7 days', them: '2–6 weeks' },
+                  { label: 'Revision rounds included', us: '1–2 rounds', them: 'Usually 1, then billed extra' },
+                  { label: 'Communication', us: 'Fast, async-first', them: 'Depends on timezone & availability' },
+                  { label: 'Hourly billing surprises', us: 'Never — fixed price', them: 'Common with scope creep' },
+                  { label: 'Code ownership', us: '100% yours, forever', them: 'Usually yours, but verify contract' },
+                  { label: 'AI-assisted', us: 'Yes — fast, consistent', them: 'Depends on the freelancer' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '14px 16px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{row.label}</td>
+                    <td style={{ padding: '14px 16px', textAlign: 'center', fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent)' }}>{row.us}</td>
+                    <td style={{ padding: '14px 16px', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{row.them}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '24px' }}>
+            Freelancer prices are estimates based on typical Upwork/Toptal rates for mid-level developers.
+          </p>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section className="pricing" id="pricing">
         <div className="container">
