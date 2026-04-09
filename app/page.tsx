@@ -531,6 +531,7 @@ export default function HomePage() {
           <p>© {new Date().getFullYear()} Built By AI. All rights reserved.</p>
           <div className="footer-links">
             <a href="/portfolio">Portfolio</a>
+            <a href="/vs">vs Freelancer</a>
             <a href="/blog/vibe-coding-guide">Blog</a>
             <a href="#pricing">Pricing</a>
             <a href="#intake">Get Started</a>
