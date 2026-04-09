@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     title: 'Built By AI — Ship Working Software, Fast',
     description: 'Tell us what you want built. We use AI coding tools to build it. You get working software.',
     type: 'website',
+    images: [{ url: '/og-image.png', width: 1024, height: 512, alt: 'Built By AI' }],
   },
   twitter: {
     card: 'summary_large_image',
