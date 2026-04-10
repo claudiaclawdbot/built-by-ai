@@ -60,7 +60,7 @@ export default function PhotographerPortfolio() {
                 <li>Up to 50 images</li>
                 <li>Contact form</li>
               </ul>
-              <a href="https://buy.stripe.com/test_placeholder" style={{ display: 'block', marginTop: '16px', background: '#1a1a1a', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 600 }}>Get Started</a>
+              <a href="https://built-by-ai-nine.vercel.app/#contact" style={{ display: 'block', marginTop: '16px', background: '#1a1a1a', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 600 }}>Get Started</a>
             </div>
             <div style={{ background: '#fff', border: '2px solid #d97706', borderRadius: '12px', padding: '24px', position: 'relative' }}>
               <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#d97706', color: '#fff', fontSize: '0.7rem', fontWeight: 700, padding: '4px 12px', borderRadius: '20px' }}>POPULAR</div>
@@ -73,7 +73,7 @@ export default function PhotographerPortfolio() {
                 <li>Lightbox viewer</li>
                 <li>Inquiry form</li>
               </ul>
-              <a href="https://buy.stripe.com/test_placeholder" style={{ display: 'block', marginTop: '16px', background: '#d97706', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700 }}>Get Started</a>
+              <a href="https://built-by-ai-nine.vercel.app/#contact" style={{ display: 'block', marginTop: '16px', background: '#d97706', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700 }}>Get Started</a>
             </div>
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
               <div style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '4px' }}>Premium</div>
@@ -85,7 +85,7 @@ export default function PhotographerPortfolio() {
                 <li>Client area</li>
                 <li>Print shop integration</li>
               </ul>
-              <a href="https://buy.stripe.com/test_placeholder" style={{ display: 'block', marginTop: '16px', background: '#1a1a1a', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 600 }}>Get Started</a>
+              <a href="https://built-by-ai-nine.vercel.app/#contact" style={{ display: 'block', marginTop: '16px', background: '#1a1a1a', color: '#fff', textAlign: 'center', padding: '12px', borderRadius: '8px', textDecoration: 'none', fontWeight: 600 }}>Get Started</a>
             </div>
           </div>
         </div>
