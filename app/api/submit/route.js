@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { createTransport } from 'nodemailer'
 
 const GMAIL_USER = process.env.GMAIL_USER || 'claudiaclawdbot@gmail.com'
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD
+const GMAIL_APP_PASSWORD = (process.env.GMAIL_APP_PASSWORD || '').replace(/-/g, '')
 
 // Supabase integration (optional)
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
