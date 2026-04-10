@@ -185,6 +185,14 @@ export default function HomePage() {
       return
     }
 
+    // For Second Brain tier, open email directly since no Stripe link exists
+    if (tier === 'second-brain') {
+      const subject = encodeURIComponent('Second Brain Setup Inquiry')
+      const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nProject: ${form.project || 'Second Brain Setup'}\nTimeline: ${form.timeline || 'Not specified'}\n\nDescription:\n${form.description}\n\nNotes:\n${form.notes || ''}`)
+      window.location.href = `mailto:hello@built-by-ai.com?subject=${subject}&body=${body}`
+      return
+    }
+
     // For custom/unknown tiers, do the manual flow
     try {
       await fetch('/api/submit', {

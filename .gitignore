@@ -9,3 +9,4 @@ out/
 dist/
 .vercel
 .env.live
+.env*.local
