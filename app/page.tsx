@@ -11,6 +11,7 @@ const PAYMENT_LINKS: Record<string, string> = {
   basic: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_BASIC || '',
   standard: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_STANDARD || '',
   complex: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_COMPLEX || '',
+  'second-brain': process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_SECOND_BRAIN || '',
 }
 
 const PRICING = [
@@ -151,14 +152,14 @@ export default function HomePage() {
   // Compute button label based on selected tier
   const buttonLabel = (() => {
     if (submitting) return 'Redirecting to Stripe...'
-    if (!form.tier || form.tier === 'custom' || form.tier === '' || form.tier === 'second-brain') return 'Submit Request →'
+    if (!form.tier || form.tier === 'custom' || form.tier === '') return 'Submit Request →'
     const p = PRICING.find(x => x.tier === form.tier)
     return `Pay $${p?.price || 0} & Submit →`
   })()
 
   // Helper text below button
   const helperText = (!form.tier || form.tier === 'custom' || form.tier === '')
-    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting. Second Brain includes a 1hr training call.'
+    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting.'
     : '💳 Secure payment via Stripe. You\'ll be redirected to complete payment.'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -182,14 +183,6 @@ export default function HomePage() {
 
       // Redirect to Stripe Payment Link
       window.location.href = PAYMENT_LINKS[tier]
-      return
-    }
-
-    // For Second Brain tier, open email directly since no Stripe link exists
-    if (tier === 'second-brain') {
-      const subject = encodeURIComponent('Second Brain Setup Inquiry')
-      const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nProject: ${form.project || 'Second Brain Setup'}\nTimeline: ${form.timeline || 'Not specified'}\n\nDescription:\n${form.description}\n\nNotes:\n${form.notes || ''}`)
-      window.location.href = `mailto:hello@built-by-ai.com?subject=${subject}&body=${body}`
       return
     }
 
