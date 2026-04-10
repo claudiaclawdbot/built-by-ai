@@ -15,3 +15,10 @@
 |--------|--------|---------|------|--------|
 | @Shadab_0706 | Twitter | Restaurant website | Mar 2023 | COLD - old |
 | @oladapizee | Twitter | Backend dev for transaction system | Apr 9 2026 | WARM - recent |
+
+## Cold Email Leads Sent (2026-04-10)
+| Restaurant | Email | Status |
+|------------|-------|--------|
+| Miss Ada | info@missadanyc.com | SENT |
+| Atera NYC | reservations@ateranyc.com | SENT |
+| Estela | info@estelanyc.com | SENT |
