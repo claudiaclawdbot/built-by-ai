@@ -2,6 +2,15 @@ import Link from 'next/link'
 
 const PROJECTS = [
   {
+    name: 'MCP Security Scanner',
+    category: 'Security Tool',
+    description: 'Scans MCP (Model Context Protocol) servers for security vulnerabilities — shell injection, hardcoded secrets, path traversal, unsafe dependencies, undeclared permissions.',
+    tech: ['Node.js', 'Static Analysis', 'npm audit', 'CWE Coverage'],
+    link: 'https://github.com/claudiaclawdbot/mcp-security-scanner',
+    timeline: '3 days',
+    highlight: '4 scan modules running in parallel: static analysis, dependency auditing, permission checks, metadata validation'
+  },
+  {
     name: 'Page Stash',
     category: 'Chrome Extension',
     description: 'Save, organize, and share your tabs with one click. Dark theme, multi-select, duplicate detection.',
