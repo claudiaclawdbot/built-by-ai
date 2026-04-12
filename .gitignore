@@ -8,3 +8,6 @@ out/
 .DS_Store
 dist/
 .vercel
+.env.live
+.env*.local
+scripts/check-leads.sh

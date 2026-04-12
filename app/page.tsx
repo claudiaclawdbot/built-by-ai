@@ -2,7 +2,17 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import ProjectEstimator from '../components/ProjectEstimator'
+import { loadStripe } from '@stripe/stripe-js'
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '')
+
+// Payment link URLs — set via env vars or replace with your Stripe Payment Link URLs
+const PAYMENT_LINKS: Record<string, string> = {
+  basic: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_BASIC || '',
+  standard: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_STANDARD || '',
+  complex: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_COMPLEX || '',
+  'second-brain': process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_SECOND_BRAIN || '',
+}
 
 const PRICING = [
   {
@@ -18,6 +28,7 @@ const PRICING = [
       'Delivered in 3–5 days',
     ],
     popular: false,
+    tier: 'basic',
   },
   {
     name: 'Standard',
@@ -32,6 +43,7 @@ const PRICING = [
       'Delivered in 5–7 days',
     ],
     popular: true,
+    tier: 'standard',
   },
   {
     name: 'Complex',
@@ -46,6 +58,22 @@ const PRICING = [
       'Delivered in 10–14 days',
     ],
     popular: false,
+    tier: 'complex',
+  },
+  {
+    name: 'Second Brain',
+    price: 750,
+    desc: 'Personal knowledge system — your own searchable brain.',
+    features: [
+      'Full folder system (raw/ wiki/ outputs/)',
+      'AI ingestion + organization scripts',
+      'Semantic search across everything',
+      'CLAUDE.md schema + onboarding',
+      '1-hour training session included',
+      'Delivered in 5 days',
+    ],
+    popular: false,
+    tier: 'second-brain',
   },
 ]
 
@@ -72,40 +100,37 @@ const FAQ = [
   },
   {
     q: "How do I pay?",
-    a: "Stripe invoice or payment link after scope confirmation. We require payment before development starts on all tiers.",
+    a: "Select your tier below, pay instantly via Stripe, and development starts right away. No back-and-forth, no invoice delay.",
+  },
+  {
+    q: "Do you offer refunds?",
+    a: "If we haven't started work and you change your mind, we offer a full refund within 48 hours of payment. If we've already begun, we prorate based on work completed.",
   },
   {
     q: "How do I know you'll actually deliver?",
     a: "You own the code after payment. If we deliver and you hate it, you still own it — you can hire anyone to fix it. We want you happy because we depend on referrals.",
   },
-  {
-    q: "Can I see examples of your work first?",
-    a: "Yes — check our case studies above. We also have Page Stash, a Chrome extension live on the Chrome Web Store that we built in 2 hours.",
-  },
-  {
-    q: "What's not included?",
-    a: "Hosting costs (Vercel/Netlify free tiers work for most projects), domain registration, content writing, and ongoing maintenance. We stick to building the software.",
-  },
-  {
-    q: "Can I hire you for ongoing work?",
-    a: "We prefer project-based work. For ongoing needs, we can discuss a monthly retainer for maintenance + small updates. Ask us after your first project.",
-  },
-  {
-    q: "What if I need changes after the revision window?",
-    a: "Small changes are usually free. Bigger changes are quoted separately at $50/hr, minimum 1 hour. We're not trying to nickel-and-dime — if it's a 5-minute fix, we just do it.",
-  },
-  {
-    q: "Do you offer refunds?",
-    a: "Because we're delivering custom work, we don't offer refunds once code is delivered. If we're significantly off-scope from what was agreed, we'll make it right.",
-  },
 ]
 
-const PROCESS = [
-  { step: '1', time: 'Day 1', title: 'You Submit the Form', desc: 'Tell us what you want built — as rough or detailed as you like.' },
-  { step: '2', time: 'Day 1–2', title: 'We Confirm Scope & Send Invoice', desc: "We review your request, confirm it's a fit, and send a Stripe payment link." },
-  { step: '3', time: 'Day 2–3', title: 'Development Starts', desc: 'Once payment clears, we spin up a private GitHub repo and start building.' },
-  { step: '4', time: 'Day 3–14', title: 'You Review & Request Changes', desc: 'We deliver working code. You test it. We iterate based on your feedback.' },
-  { step: '5', time: 'Done', title: 'Code Delivered', desc: 'Final repo is handed over. You own it and can do whatever you want with it.' },
+const CASE_STUDIES = [
+  {
+    title: 'MCP Security Scanner',
+    tier: 'Complex — $500',
+    desc: 'Built an open-source security scanner for AI agent frameworks (MCP servers). Detects 15+ vulnerability categories including shell injection, auth bypass, SSRF, and supply chain issues. Published on npm.',
+    result: 'Published on npm, runs in CI, open source on GitHub.',
+  },
+  {
+    title: 'Full-stack AI web app',
+    tier: 'Complex — $500',
+    desc: 'Built a production AI web app from scratch: Next.js frontend, Supabase backend, authentication, database, and deployment. Handles real user traffic.',
+    result: 'Deployed and live, connected to real APIs.',
+  },
+  {
+    title: 'Autonomous agent system',
+    tier: 'Complex — $500',
+    desc: 'Built an AI agent that runs 24/7, detects its own failures, writes skills to fix them, and iterates on itself. Includes a research loop that discovers new tools.',
+    result: 'Running autonomously, improving itself continuously.',
+  },
 ]
 
 export default function HomePage() {
@@ -113,6 +138,29 @@ export default function HomePage() {
   const [form, setForm] = useState({
     name: '', email: '', project: '', tier: '', description: '', timeline: '', notes: '',
   })
+  const [submitting, setSubmitting] = useState(false)
+
+  // Compute the payment message based on selected tier
+  const paymentMessage = (() => {
+    if (!form.tier || form.tier === 'custom' || form.tier === '' || form.tier === 'second-brain') {
+      return 'After scope confirmation, we\'ll send a payment link.'
+    }
+    const p = PRICING.find(x => x.tier === form.tier)
+    return `You'll be redirected to Stripe to pay $${p?.price || 0} instantly — takes 30 seconds.`
+  })()
+
+  // Compute button label based on selected tier
+  const buttonLabel = (() => {
+    if (submitting) return 'Redirecting to Stripe...'
+    if (!form.tier || form.tier === 'custom' || form.tier === '') return 'Submit Request →'
+    const p = PRICING.find(x => x.tier === form.tier)
+    return `Pay $${p?.price || 0} & Submit →`
+  })()
+
+  // Helper text below button
+  const helperText = (!form.tier || form.tier === 'custom' || form.tier === '')
+    ? 'We review every submission. If we\'re not a fit, we\'ll tell you — no ghosting.'
+    : '💳 Secure payment via Stripe. You\'ll be redirected to complete payment.'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -120,6 +168,25 @@ export default function HomePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSubmitting(true)
+
+    const tier = form.tier
+
+    // For fixed tiers, redirect to Stripe Payment Link immediately
+    if (tier && PAYMENT_LINKS[tier]) {
+      // Still submit lead data to our API in background
+      fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      }).catch(() => {}) // fire and forget
+
+      // Redirect to Stripe Payment Link
+      window.location.href = PAYMENT_LINKS[tier]
+      return
+    }
+
+    // For custom/unknown tiers, do the manual flow
     try {
       await fetch('/api/submit', {
         method: 'POST',
@@ -127,7 +194,7 @@ export default function HomePage() {
         body: JSON.stringify(form),
       })
     } catch {
-      // Submit anyway, redirect to success
+      // Submit anyway
     }
     router.push('/success')
   }
@@ -145,244 +212,189 @@ export default function HomePage() {
       {/* Hero */}
       <section className="hero">
         <div className="container">
-          <div className="hero-badge">⚡ AI-powered development. Fixed prices.</div>
-          <h1>
-            Tell us what you want built.<br />
-            <span className="gradient">We ship working software.</span>
-          </h1>
+          <div className="hero-proof-label">Built with AI coding tools. You own the code. We handle the build.</div>
+          <h1>Your web project,<br />built by AI — fast.</h1>
           <p className="hero-sub">
-            We use AI coding tools to build your web app, feature, or automation — faster and cheaper than traditional agencies. You get the code. You own it.
+            Tell us what you want. We build it using AI coding tools.
+            You get the code. Fixed price. Shipped in days.
           </p>
           <div className="hero-actions">
-            <a href="#intake" className="btn-primary">Start Your Project →</a>
-            <a href="#how-it-works" className="btn-secondary">How It Works</a>
-          </div>
-          <div className="hero-proof">
-            <div className="hero-proof-item">
-              <div className="hero-proof-num">$100+</div>
-              <div className="hero-proof-label">Fixed price tiers</div>
-            </div>
-            <div className="hero-proof-item">
-              <div className="hero-proof-num">3–14 days</div>
-              <div className="hero-proof-label">Delivery window</div>
-            </div>
-            <div className="hero-proof-item">
-              <div className="hero-proof-num">100%</div>
-              <div className="hero-proof-label">You own the code</div>
-            </div>
+            <a href="#pricing" className="btn-primary">See Pricing →</a>
+            <a href="#intake" className="btn-secondary">Start Your Project →</a>
           </div>
         </div>
       </section>
 
-      {/* Testimonials — placeholder, replace with real ones */}
-      <section className="testimonials" id="testimonials">
+      {/* Proof / Trust */}
+      <section className="proof">
         <div className="container">
-          <div className="section-label" style={{ textAlign: 'center' }}>Early interest</div>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>What people are saying.</h2>
-          <div className="testimonials-grid">
-            {[
-              { quote: "I've been meaning to build my portfolio site for 6 months. This exists at exactly the right time.", author: "Sarah K., Freelance Designer" },
-              { quote: "The gap between 'wanting to build something' and actually building it is real. This fills it.", author: "Marcus T., Startup Founder" },
-              { quote: "I tried vibe coding and spent 3 hours debugging. Got exactly what I wanted here in 2 days.", author: "Priya M., Product Manager" },
-            ].map((t, i) => (
-              <div className="testimonial-card" key={i}>
-                <div className="testimonial-quote">"{t.quote}"</div>
-                <div className="testimonial-author">— {t.author}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Who this is for */}
-      <section className="who" id="who">
-        <div className="container">
-          <div className="section-label" style={{ textAlign: 'center' }}>Who this is for</div>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>Honest about who we help.</h2>
-          <div className="who-grid">
-            <div className="who-card good">
-              <h3>✅ Great fit</h3>
-              <ul>
-                <li>You have a clear idea but no dev team</li>
-                <li>You want results, not to learn to code</li>
-                <li>You value fixed pricing over hourly billing</li>
-                <li>You need something live in under 2 weeks</li>
-                <li>You want to own the code after</li>
-              </ul>
+          <div className="proof-grid">
+            <div className="proof-stat">
+              <div className="proof-number">100%</div>
+              <div className="proof-label">Code ownership — you get the repo</div>
             </div>
-            <div className="who-card bad">
-              <h3>❌ Not a fit</h3>
-              <ul>
-                <li>You need ongoing support / maintenance</li>
-                <li>Your budget is under $50</li>
-                <li>You need enterprise security compliance</li>
-                <li>You're not sure what you want yet</li>
-                <li>You want to iterate forever with no scope</li>
-              </ul>
+            <div className="proof-stat">
+              <div className="proof-number">3–14</div>
+              <div className="proof-label">Days to first delivery</div>
+            </div>
+            <div className="proof-stat">
+              <div className="proof-number">$100</div>
+              <div className="proof-label">Starting price, no hourly billing</div>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="divider" />
+      {/* Testimonials */}
+      <section style={{ background: 'var(--bg2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        {/* Case Studies Section */}
+        <div className="container" style={{ padding: '64px 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="section-label">Recent Projects</div>
+            <h2 className="section-title">What we've built.</h2>
+          </div>
+        </div>
+      </section>
 
       {/* Case Studies */}
-      <section className="cases" id="cases">
+      <section className="case-studies">
         <div className="container">
-          <div className="section-label" style={{ textAlign: 'center' }}>Example projects</div>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>What we build.</h2>
-          <div className="cases-grid">
-            {[
-              {
-                tier: 'Basic — $100',
-                title: 'Podcast Landing Page',
-                desc: 'Single-page site with hero, episode list, and email capture form. Delivered in 4 days.',
-                timeline: '4 days',
-                result: 'Live site, 200+ email signups in first week'
-              },
-              {
-                tier: 'Standard — $250',
-                title: 'Lead Capture Dashboard',
-                desc: 'Web app that scraped LinkedIn profiles and saved leads to a Supabase database with a clean UI.',
-                timeline: '6 days',
-                result: 'Client used it to capture 500+ leads per week'
-              },
-              {
-                tier: 'Complex — $500',
-                title: 'Page Stash Chrome Extension',
-                desc: 'Extension that saves, organizes, and shares tabs. Dark theme, multi-select, duplicate detection. Built in 2 hours.',
-                timeline: '2 hours',
-                result: 'Live on Chrome Web Store, 500+ users'
-              },
-            ].map((c, i) => (
+          <div className="section-label">Case Studies</div>
+          <h2 className="section-title">What we have built.</h2>
+          <div className="cases">
+            {CASE_STUDIES.map((c, i) => (
               <div className="case-card" key={i}>
                 <div className="case-tier">{c.tier}</div>
                 <h3>{c.title}</h3>
                 <p>{c.desc}</p>
-                <div className="case-meta">
-                  <span>⏱ {c.timeline}</span>
-                  <span>✓ {c.result}</span>
-                </div>
+                <div className="case-result">✓ {c.result}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      <div className="divider" />
 
       {/* How It Works */}
-      <section className="how" id="how-it-works">
+      <section className="how">
         <div className="container">
-          <div className="section-label">How it works</div>
-          <h2 className="section-title">From idea to live code in days.</h2>
-          <p className="section-sub">No lengthy proposals. No retainers. Just describe what you want and we build it.</p>
+          <div className="section-label">How It Works</div>
+          <h2 className="section-title">From idea to live code — fast.</h2>
           <div className="steps">
-            {[
-              { title: 'You describe your project', desc: 'Fill out the intake form. Plain English is fine — "I want a landing page with a contact form that saves to a spreadsheet." Done.' },
-              { title: 'We confirm scope & price', desc: "We review what you sent, confirm it's a fit for our tiers, and send a Stripe payment link. You approve before anything starts." },
-              { title: 'We build it fast', desc: 'Using AI coding tools (Claude Code, Cursor, Next.js), we write clean, working code and push it to a private GitHub repo.' },
-              { title: 'You review & iterate', desc: "Test it out. Request changes within your revision window. We fix what's off until you're happy." },
-              { title: 'Code is yours forever', desc: "Final repo is handed over. You can deploy it, modify it, hire someone else to maintain it — no strings attached." },
-              { title: 'Real support, real human', desc: "Not a chatbot. You'll work directly with us. Questions, clarifications, small tweaks — just ask." },
-            ].map((step, i) => (
-              <div className="step-card" key={i}>
-                <div className="step-num">{i + 1}</div>
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-              </div>
-            ))}
+            <div className="step">
+              <div className="step-num">1</div>
+              <h3>Pick your tier & pay</h3>
+              <p>Select the tier that fits your scope. Pay instantly via Stripe. No negotiation, no invoices — just click and go.</p>
+            </div>
+            <div className="step">
+              <div className="step-num">2</div>
+              <h3>Describe your project</h3>
+              <p>Fill out our 2-minute intake form. Plain English is perfect. Tell us what you want, any examples you like, and your timeline.</p>
+            </div>
+            <div className="step">
+              <div className="step-num">3</div>
+              <h3>We build & deliver</h3>
+              <p>We use AI coding tools to build your project. You get a GitHub repo with working code, deployed and ready to use.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="divider" />
-
-      {/* Process */}
-      <section className="process">
-        <div className="container">
-          <div className="section-label">The process</div>
-          <h2 className="section-title">What happens after you submit.</h2>
-          <p className="section-sub">Five steps. No black boxes.</p>
-          <div className="timeline">
-            {PROCESS.map((item) => (
-              <div className="tl-item" key={item.step}>
-                <div className="tl-dot">{item.step}</div>
-                <div className="tl-content">
-                  <div className="tl-time">{item.time}</div>
-                  <h4>{item.title}</h4>
-                  <p>{item.desc}</p>
-                </div>
-              </div>
-            ))}
+      {/* Why Us vs Freelancer */}
+      <section style={{ background: 'var(--bg2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        <div className="container" style={{ padding: '64px 24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <div className="section-label">The Difference</div>
+            <h2 className="section-title">Why work with us instead of a freelancer?</h2>
           </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '560px' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--border)' }}>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}></th>
+                  <th style={{ textAlign: 'center', padding: '12px 16px', color: 'var(--accent)', fontSize: '0.85rem', fontWeight: 700 }}>Built By AI</th>
+                  <th style={{ textAlign: 'center', padding: '12px 16px', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700 }}>Typical Freelancer</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { label: 'Price for a landing page', us: '$100', them: '$500–2,000' },
+                  { label: 'Price for a web app', us: '$250', them: '$2,000–8,000' },
+                  { label: 'Turnaround time', us: '3–7 days', them: '2–6 weeks' },
+                  { label: 'Revision rounds included', us: '1–2 rounds', them: 'Usually 1, then billed extra' },
+                  { label: 'Communication', us: 'Fast, async-first', them: 'Depends on timezone & availability' },
+                  { label: 'Hourly billing surprises', us: 'Never — fixed price', them: 'Common with scope creep' },
+                  { label: 'Code ownership', us: '100% yours, forever', them: 'Usually yours, but verify contract' },
+                  { label: 'AI-assisted', us: 'Yes — fast, consistent', them: 'Depends on the freelancer' },
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '14px 16px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{row.label}</td>
+                    <td style={{ padding: '14px 16px', textAlign: 'center', fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent)' }}>{row.us}</td>
+                    <td style={{ padding: '14px 16px', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{row.them}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '24px' }}>
+            Freelancer prices are estimates based on typical Upwork/Toptal rates for mid-level developers.
+          </p>
         </div>
       </section>
-
-      <div className="divider" />
 
       {/* Pricing */}
       <section className="pricing" id="pricing">
         <div className="container">
-          <div className="section-label" style={{ textAlign: 'center' }}>Pricing</div>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>Simple, transparent pricing.</h2>
-          <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 56px' }}>
-            No hourly billing. No retainers. Pick a tier that fits your scope.
-          </p>
+          <div className="section-label">Pricing</div>
+          <h2 className="section-title">Fixed price. No surprises.</h2>
           <div className="pricing-grid">
-            {PRICING.map((plan) => (
-              <div className={`price-card${plan.popular ? ' popular' : ''}`} key={plan.name}>
-                {plan.popular && <div className="popular-badge">Most Popular</div>}
-                <div className="price-name">{plan.name}</div>
-                <div className="price-amount">
-                  <span className="dollar">$</span>
-                  <span className="num">{plan.price}</span>
-                </div>
-                <div className="price-desc">{plan.desc}</div>
-                <ul className="price-features">
-                  {plan.features.map((f) => (
-                    <li key={f}><span className="check">✓</span>{f}</li>
+            {PRICING.map((p) => (
+              <div className={`pricing-card ${p.popular ? 'popular' : ''}`} key={p.name}>
+                {p.popular && <div className="popular-badge">Most Popular</div>}
+                <div className="pricing-name">{p.name}</div>
+                <div className="pricing-price">${p.price}</div>
+                <div className="pricing-desc">{p.desc}</div>
+                <ul className="pricing-features">
+                  {p.features.map((f, i) => (
+                    <li key={i}>✓ {f}</li>
                   ))}
                 </ul>
-                <a href="#intake" className={`price-cta btn-${plan.popular ? 'primary' : 'secondary'}`}>
-                  Get Started
+                <a
+                  href="#intake"
+                  className={`btn-primary ${p.popular ? '' : 'btn-secondary'}`}
+                  onClick={() => setForm(prev => ({ ...prev, tier: p.tier }))}
+                >
+                  Get Started →
                 </a>
               </div>
             ))}
           </div>
-          <p style={{ textAlign: 'center', marginTop: '32px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Need something bigger? <a href="#intake">Custom scoping available.</a>
-          </p>
         </div>
       </section>
-
-      <ProjectEstimator />
-
-      <div className="divider" />
 
       {/* Intake Form */}
       <section className="intake" id="intake">
         <div className="container">
-          <div className="section-label" style={{ textAlign: 'center' }}>Start here</div>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>Tell us what you want built.</h2>
-          <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 48px' }}>
-            Fill this out. We'll review it, confirm scope, and send you a payment link — usually within 24 hours.
-          </p>
+          <div className="section-label">Get Started</div>
+          <h2 className="section-title">Tell us about your project.</h2>
+
           <div className="intake-wrapper">
+            <div className="intake-form">
               <form onSubmit={handleSubmit}>
                 <div className="form-note">
-                  <strong>💳 Payment:</strong> After we confirm your project fits our tiers, we'll send a Stripe payment link. Development starts once payment clears.
+                  <strong>💳 Payment:</strong>{' '}{paymentMessage}
                 </div>
+
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="name">Your Name</label>
+                    <label htmlFor="name">Name</label>
                     <input type="text" id="name" name="name" value={form.name} onChange={handleChange} placeholder="Jane Smith" required />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="email">Email Address</label>
+                    <label htmlFor="email">Email</label>
                     <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder="jane@example.com" required />
                   </div>
                 </div>
+
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="tier">Pricing Tier</label>
@@ -391,6 +403,7 @@ export default function HomePage() {
                       <option value="basic">Basic — $100</option>
                       <option value="standard">Standard — $250</option>
                       <option value="complex">Complex — $500</option>
+                      <option value="second-brain">Second Brain — $750</option>
                       <option value="custom">Custom / Not sure</option>
                     </select>
                   </div>
@@ -405,26 +418,43 @@ export default function HomePage() {
                     </select>
                   </div>
                 </div>
+
                 <div className="form-group">
                   <label htmlFor="project">Project Type</label>
                   <input type="text" id="project" name="project" value={form.project} onChange={handleChange} placeholder="e.g. Landing page, Chrome extension, API integration, Dashboard..." required />
                 </div>
+
                 <div className="form-group">
                   <label htmlFor="description">Describe what you want built</label>
                   <textarea id="description" name="description" value={form.description} onChange={handleChange} placeholder="The more detail the better, but rough is fine. Example: 'I want a landing page for my podcast with an email signup form that saves leads to a CSV file.'" required />
                   <small>Include: what it does, who it's for, any designs/references you have, any technical requirements.</small>
                 </div>
+
                 <div className="form-group">
                   <label htmlFor="notes">Anything else we should know? <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>(optional)</span></label>
                   <textarea id="notes" name="notes" value={form.notes} onChange={handleChange} placeholder="Budget constraints, specific tech requirements, future plans, or just a note about your vibe..." />
                 </div>
-                <button type="submit" className="btn-primary" style={{ width: '100%', fontSize: '1.05rem', padding: '16px' }}>
-                  Submit Request →
+
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  style={{ width: '100%', fontSize: '1.05rem', padding: '16px' }}
+                  disabled={submitting}
+                >
+                  {buttonLabel}
                 </button>
                 <p style={{ textAlign: 'center', marginTop: '16px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                  We review every submission. If we're not a fit, we'll tell you — no ghosting.
+                  {helperText}
+                </p>
+                <p style={{ textAlign: 'center', marginTop: '8px', color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                  Or email us directly:{' '}
+                  <a href="mailto:hello@built-by-ai.com?subject=Project%20Inquiry&body=Name%3A%0AEmail%3A%0AProject%20description%3A%0ATier%20(100%2F250%2F500)%3A%0A" style={{ color: 'var(--accent)' }}>
+                    hello@built-by-ai.com
+                  </a>
+                  {' '}— we respond within 24 hours.
                 </p>
               </form>
+            </div>
           </div>
         </div>
       </section>
@@ -464,6 +494,7 @@ export default function HomePage() {
           <p>© {new Date().getFullYear()} Built By AI. All rights reserved.</p>
           <div className="footer-links">
             <a href="/portfolio">Portfolio</a>
+            <a href="/vs">vs Freelancer</a>
             <a href="/blog/vibe-coding-guide">Blog</a>
             <a href="#pricing">Pricing</a>
             <a href="#intake">Get Started</a>
