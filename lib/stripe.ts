@@ -1,4 +1,5 @@
 import { loadStripe } from '@stripe/stripe-js'
+import type { Tier } from './types'
 
 // Stripe publishable key from Vercel env vars
 export const stripePromise = loadStripe(
@@ -12,8 +13,6 @@ export const PAYMENT_LINKS = {
   standard: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_STANDARD || '',
   complex: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_COMPLEX || '',
 } as const
-
-export type Tier = 'basic' | 'standard' | 'complex' | 'custom'
 
 export function getPaymentLink(tier: Tier): string | null {
   if (tier === 'custom') return null
