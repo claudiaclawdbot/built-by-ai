@@ -2,17 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { loadStripe } from '@stripe/stripe-js'
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '')
-
-// Payment link URLs — set via env vars or replace with your Stripe Payment Link URLs
-const PAYMENT_LINKS: Record<string, string> = {
-  basic: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_BASIC || '',
-  standard: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_STANDARD || '',
-  complex: process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_COMPLEX || '',
-  'second-brain': process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_SECOND_BRAIN || '',
-}
+import { PAYMENT_LINKS } from '@/lib/stripe'
 
 const PRICING = [
   {
@@ -140,7 +130,6 @@ export default function HomePage() {
   })
   const [submitting, setSubmitting] = useState(false)
 
-  // Compute the payment message based on selected tier
   const paymentMessage = (() => {
     if (!form.tier || form.tier === 'custom' || form.tier === '' || form.tier === 'second-brain') {
       return 'After scope confirmation, we\'ll send a payment link.'
@@ -149,7 +138,6 @@ export default function HomePage() {
     return `You'll be redirected to Stripe to pay $${p?.price || 0} instantly — takes 30 seconds.`
   })()
 
-  // Compute button label based on selected tier
   const buttonLabel = (() => {
     if (submitting) return 'Redirecting to Stripe...'
     if (!form.tier || form.tier === 'custom' || form.tier === '') return 'Submit Request →'
@@ -179,23 +167,17 @@ export default function HomePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      }).catch(() => {}) // fire and forget
-
       // Redirect to Stripe Payment Link
       window.location.href = PAYMENT_LINKS[tier]
       return
     }
 
     // For custom/unknown tiers, do the manual flow
-    try {
-      await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-    } catch {
-      // Submit anyway
-    }
+    await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
     router.push('/success')
   }
 
