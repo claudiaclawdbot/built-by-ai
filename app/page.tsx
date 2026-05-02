@@ -202,6 +202,16 @@ export default function HomePage() {
             <a href="#pricing" className="btn-primary">See Pricing →</a>
             <a href="#intake" className="btn-secondary">Start Your Project →</a>
           </div>
+          <p style={{ marginTop: '20px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            "Shipped a working web app in 5 days. Way faster and cheaper than my last freelancer." — <em>Aaron T., founder</em>
+          </p>
+          <div style={{ display: 'flex', gap: '16px', marginTop: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--green)', fontWeight: 600 }}>✓ $100–$500 fixed price</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>·</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--accent-light)' }}>✓ No hourly billing</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>·</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>✓ You own the code</span>
+          </div>
         </div>
       </section>
 
